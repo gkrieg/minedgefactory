@@ -3,8 +3,7 @@ import sys
 tree = ET.parse(sys.argv[1])
 root = tree.getroot()
 #print(root[0][6][0].attrib)
-rootdir = '../biopax-hypergraph/test/parsed/'
-#rootdir = ''
+rootdir = 'databases/'
 outf = open('{}parsed{}-hyperedges.txt'.format(rootdir,sys.argv[2]),'w')
 nodesoutf = open('{}parsed{}-hypernodes.txt'.format(rootdir,sys.argv[2]),'w')
 
