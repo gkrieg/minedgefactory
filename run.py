@@ -300,8 +300,8 @@ def main(args):
             timebegin = time.time()
             ilpfile = open(ilpname,'w')
             write_binary = True
-            #write_stoichiometry_ilp(ilpfile,H,stoichiometries,targets,source_edges,sources=sources,positiveflux=True,binary_vars=write_binary)
-            write_stoichiometry_ilp(ilpfile,H,stoichiometries,targets,source_edges,sources=sources,positiveflux=True,binary_vars=write_binary,negative_regulators=negative_regulators)
+            write_stoichiometry_ilp(ilpfile,H,stoichiometries,targets,source_edges,sources=sources,positiveflux=True,binary_vars=write_binary)
+            #write_stoichiometry_ilp(ilpfile,H,stoichiometries,targets,source_edges,sources=sources,positiveflux=True,binary_vars=write_binary,negative_regulators=negative_regulators)
             ilpfile.close()
             try:
                 solve_stoichiometry_ilp(ilpname,H,sources,binary_vars=write_binary,solnum=3)
@@ -312,14 +312,39 @@ def main(args):
                 print('not able to solve first ILP\n')
             ilpfile = open(ilpname,'w')
             write_binary = True
-            #write_stoichiometry_ilp(ilpfile,H,stoichiometries,targets,source_edges,sources=sources,positiveflux=False,binary_vars=write_binary)
-            write_stoichiometry_ilp(ilpfile,H,stoichiometries,targets,source_edges,sources=sources,positiveflux=False,binary_vars=write_binary,negative_regulators=negative_regulators)
+            write_stoichiometry_ilp(ilpfile,H,stoichiometries,targets,source_edges,sources=sources,positiveflux=False,binary_vars=write_binary)
+            #write_stoichiometry_ilp(ilpfile,H,stoichiometries,targets,source_edges,sources=sources,positiveflux=False,binary_vars=write_binary,negative_regulators=negative_regulators)
             ilpfile.close()
             try:
                 solve_stoichiometry_ilp(ilpname,H,sources,binary_vars=write_binary,solnum=3)
                 print('solved conservation MILP\n')
             except:
                 print('not able to solve conservation ILP\n')
+
+            if opts.negative:
+
+                ilpfile = open(ilpname,'w')
+                write_binary = True
+                #write_stoichiometry_ilp(ilpfile,H,stoichiometries,targets,source_edges,sources=sources,positiveflux=True,binary_vars=write_binary)
+                write_stoichiometry_ilp(ilpfile,H,stoichiometries,targets,source_edges,sources=sources,positiveflux=True,binary_vars=write_binary,negative_regulators=negative_regulators)
+                ilpfile.close()
+                try:
+                    solve_stoichiometry_ilp(ilpname,H,sources,binary_vars=write_binary,solnum=3)
+                    print('solved first MILP negative regulation\n')
+                    #print('neg\n')
+                except:
+                    
+                    print('not able to solve first ILP negative regulation\n')
+                ilpfile = open(ilpname,'w')
+                write_binary = True
+                #write_stoichiometry_ilp(ilpfile,H,stoichiometries,targets,source_edges,sources=sources,positiveflux=False,binary_vars=write_binary)
+                write_stoichiometry_ilp(ilpfile,H,stoichiometries,targets,source_edges,sources=sources,positiveflux=False,binary_vars=write_binary,negative_regulators=negative_regulators)
+                ilpfile.close()
+                try:
+                    solve_stoichiometry_ilp(ilpname,H,sources,binary_vars=write_binary,solnum=3)
+                    print('solved conservation MILP negative regulation\n')
+                except:
+                    print('not able to solve conservation ILP negative regulation\n')
 
             #source,target = add_super_nodes(H,sources,targets,high_penalty_sources,opts.name)
             #H, vertex_dict = convert_hypergraph_nodes(H)
@@ -419,6 +444,7 @@ def parseOptions(args):
     parser.add_option('','--stoichiometry',action='store_true',help='stoichiometric hyperpath from S to T.')
     parser.add_option('','--minimal_precursor',action='store_true',help='stoichiometric hyperpath from S to T.')
     parser.add_option('','--sbml',action='store_true',help='stoichiometric hyperpath from S to T.')
+    parser.add_option('','--negative',action='store_true',help='stoichiometric hyperpath from S to T with first order negative regulation.')
     parser.add_option('','--second_order_neg_reg',action='store_true',help='stoichiometric hyperpath from S to T.')
     parser.add_option('','--hybrid',action='store_true',help='Compute heuristic shortest cyclic hyperpath from S to T.')
     parser.add_option('','--facenumeration',action='store_true',help='enumerate heuristic shortest cyclic hyperpath from S to T.')

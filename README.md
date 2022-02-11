@@ -12,8 +12,11 @@ For sbml files (which must have already been parsed by xmlparser.py):
 For Reactome with stoichiometry:
 `python run.py --name <name of -hypernodes.txt file> --stoichiometry --target <desired target>`
 
+For first order negative regulation on Reactome:
+`python run.py --name <name of -hypernodes.txt file> --stoichiometry --negative --target <desired target>`
+
 For second order negative regulation on Reactome:
-`python run.py --name <name of -hypernodes.txt file> --secondordernegreg --target <desired target>`
+`python run.py --name <name of -hypernodes.txt file> --stoichiometry --secondordernegreg --target <desired target>`
 
 The repository also comes with a parser that takes SBML files and converts them into the hyperedges.txt and hypernodes.txt files required for the application.
 To run the parser:
